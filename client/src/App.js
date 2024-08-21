@@ -12,7 +12,7 @@ function App() {
   return (
       <Router>
         <NavBar />
-        <div className="pt-16"> {/* Adding padding for the navbar */}
+        <div className="pt-16"> 
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/dashboard" element={<Dashboard />} />

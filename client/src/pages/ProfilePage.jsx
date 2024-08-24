@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 const ProfilePage = () => {
     const [userData, setUserData] = useState({
-        name: 'John Doe',
-        email: 'johndoe@example.com',
+        name: 'Danilo Pavicevic',
+        email: 'danilo.pavicevic@example.com',
 
     });
 

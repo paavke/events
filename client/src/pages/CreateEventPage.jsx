@@ -8,8 +8,9 @@ const CreateEventPage = () => {
     const [location, setLocation] = useState('');
     const [description, setDescription] = useState('');
     const [responsibleUser, setResponsibleUser] = useState('');
-    const [participants, setParticipants] = useState([]);
+    const [participants, setParticipants] = useState([{ userId: '', role: '' }]);
     const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         // Fetch all users to be listed in dropdowns
@@ -24,8 +25,19 @@ const CreateEventPage = () => {
         fetchUsers();
     }, []);
 
+    const handleParticipantChange = (index, field, value) => {
+        const updatedParticipants = [...participants];
+        updatedParticipants[index][field] = value;
+        setParticipants(updatedParticipants);
+    };
+
+    const addParticipant = () => {
+        setParticipants([...participants, { userId: '', role: '' }]);
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const token = localStorage.getItem('accessToken');
         const headers = {
             'Authorization': `Bearer ${token}`,
@@ -38,15 +50,41 @@ const CreateEventPage = () => {
             location: location,
             description: description,
             userId: responsibleUser, // Responsible user ID
-            participants: participants // Array of participant IDs
+            participants: participants.map(p => ({ userId: p.userId, role: p.role })), // Send participants directly within the event creation payload if supported
         };
-        console.log(eventData); // Log the payload before sending it
+
+        console.log("Creating event with data:", eventData); // Log the event data before sending
 
         try {
-            await axios.post(`${config.baseURL}/apiman-gateway/default/events/1.0?apikey=${config.apikey}`, eventData, { headers });
-            alert("Event created successfully!");
+            // First, create the event
+            const eventResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/events/1.0?apikey=${config.apikey}`, eventData, { headers });
+            const createdEventId = eventResponse.data.id; // Assuming response contains the event ID
+
+            console.log("Event created with ID:", createdEventId);
+
+            // Then, create the participants one by one and link them to the event
+            for (let participant of participants) {
+                const participantData = {
+                    eventId: createdEventId, // Link participant to the created event
+                    userId: participant.userId,
+                    role: participant.role
+                };
+
+                console.log("Posting participant data:", participantData); // Log the participant data before sending
+
+                try {
+                    const participantResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/participants/1.0?apikey=${config.apikey}`, participantData, { headers });
+                    console.log("Participant posted successfully:", participantResponse.data);
+                } catch (participantError) {
+                    console.error("Error posting participant:", participantError);
+                }
+            }
+
+            alert("Event and participants created successfully!");
+            setLoading(false);
         } catch (error) {
-            console.error("Error creating event:", error);
+            console.error("Error creating event or participants:", error);
+            setLoading(false);
         }
     };
 
@@ -122,22 +160,41 @@ const CreateEventPage = () => {
                         </select>
                     </div>
 
-                    {/* Participants */}
+                    {/* Participants Section */}
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Participants</label>
-                        <select
-                            multiple
-                            value={participants}
-                            onChange={(e) => setParticipants([...e.target.selectedOptions].map(option => option.value))}
-                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline h-32"
-                            required
+                        {participants.map((participant, index) => (
+                            <div key={index} className="flex space-x-4 mb-4">
+                                <select
+                                    value={participant.userId}
+                                    onChange={(e) => handleParticipantChange(index, 'userId', e.target.value)}
+                                    className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-1/2"
+                                    required
+                                >
+                                    <option value="">Select Participant</option>
+                                    {users.map((user) => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.name}
+                                        </option>
+                                    ))}
+                                </select>
+                                <input
+                                    type="text"
+                                    placeholder="Enter role"
+                                    value={participant.role}
+                                    onChange={(e) => handleParticipantChange(index, 'role', e.target.value)}
+                                    className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline w-1/2"
+                                    required
+                                />
+                            </div>
+                        ))}
+                        <button
+                            type="button"
+                            onClick={addParticipant}
+                            className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded"
                         >
-                            {users.map((user) => (
-                                <option key={user.id} value={user.id}>
-                                    {user.name}
-                                </option>
-                            ))}
-                        </select>
+                            Add Participant
+                        </button>
                     </div>
 
                     {/* Submit Button */}
@@ -146,7 +203,7 @@ const CreateEventPage = () => {
                             type="submit"
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                         >
-                            Create Event
+                            {loading ? "Creating Event..." : "Create Event"}
                         </button>
                     </div>
                 </form>

@@ -80,7 +80,7 @@ const CreateEventPage = () => {
                 }
             }
 
-            alert("Event and participants created successfully!");
+            alert("Event and participants created successfully");
             setLoading(false);
         } catch (error) {
             console.error("Error creating event or participants:", error);

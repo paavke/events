@@ -5,7 +5,6 @@ public class ParticipantDTO {
     private String id;
     private String userId;
     private String eventId;
-
     private String role;
 
     public String getRole() {
@@ -15,7 +14,6 @@ public class ParticipantDTO {
     public void setRole(String role) {
         this.role = role;
     }
-// Getters and Setters for all fields
 
     public String getId() {
         return id;

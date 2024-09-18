@@ -18,7 +18,7 @@ const CreateTaskPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    // Fetch events and users when the page loads
+    // fetch events and users
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -60,6 +60,7 @@ const CreateTaskPage = () => {
         }));
     };
 
+    //post task
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -70,7 +71,7 @@ const CreateTaskPage = () => {
                 'Content-Type': 'application/json',
             };
 
-            // Post new task to the backend
+            //post task to back
             await axios.post(`${config.baseURL}/apiman-gateway/default/tasks/1.0?apikey=${config.apikey}`, task, { headers });
 
             setLoading(false);
@@ -91,7 +92,7 @@ const CreateTaskPage = () => {
                 {error && <p className="text-red-500">{error}</p>}
 
                 <form onSubmit={handleSubmit}>
-                    {/* Task Title */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700">Task Title</label>
                         <input

@@ -1,12 +1,12 @@
 
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸ÖâŸš2J$048ae731-39c4-4614-bb40-e1b387e4745e
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸ÖâŸš2J$af0bc02b-4698-4451-8021-62c67e4ae237
 ½
-java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8¿ÖâŸš2J$fd801d3f-c29c-4224-ac5e-b92413e9afa5
+java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8¿ÖâŸš2J$a8ddcff3-d4e2-4ac7-8665-35b51473c6cd
 ½
-java:S6204%"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8Ìí†¡š2J$2d4093c2-f176-4563-9897-d1930f4c4009
+java:S6204%"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8Ìí†¡š2J$38623a4e-9e85-43bf-94d5-439cfe1f7f2f
 ½
-java:S6204-"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8´©¼¶œ2J$821a7038-6b22-4763-bfcb-abd4341f57ff
-r	java:S106/"+Replace this use of System.out by a logger.(àùé´øÿÿÿÿ8¸©¼¶œ2J$4e4060cb-40dd-4a13-8a59-06113614e0cd
-G
-java:S1068"*Remove this unused "LOGGER" private field.(šƒñ’8œó·œ2
+java:S6204-"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8´©¼¶œ2J$28922979-0960-42fd-a1cd-6a9a36b732d4
+r	java:S106/"+Replace this use of System.out by a logger.(ŒÉ£ºùÿÿÿÿ8¸©¼¶œ2J$325d4dc0-8c31-4da7-937e-e5351d1196b8
+m
+java:S1068"*Remove this unused "LOGGER" private field.(šƒñ’8œó·œ2J$8dfec61e-734a-4842-8ac8-bb9f778def82

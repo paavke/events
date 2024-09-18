@@ -23,9 +23,6 @@ const NavBar = () => {
                     <Link to={`/events-list/${userId}`} className="text-white">Events</Link>
                     <Link to="/tasks" className="text-white">Tasks</Link>
                     <Link to="/profile" className="text-white">Profile</Link>
-
-
-
                 </div>
                 <div className="text-white">
                     {userId ? (

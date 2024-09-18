@@ -106,7 +106,6 @@ const ProfileManagementPage = () => {
         }
     };
 
-
     const handleDeleteUser = async () => {
         if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
 
@@ -114,14 +113,12 @@ const ProfileManagementPage = () => {
             const token = localStorage.getItem('accessToken');
             const headers = { Authorization: `Bearer ${token}` };
 
-
             await axios.delete(`${config.baseURL}/apiman-gateway/default/users/1.0/${userId}?apikey=${config.apikey}`, { headers });
             console.log("User profile deleted successfully");
 
             alert('Your account has been deleted');
             localStorage.removeItem('userId');
             localStorage.removeItem('accessToken');
-
 
             window.location.href = '/';
         } catch (error) {
@@ -168,7 +165,6 @@ const ProfileManagementPage = () => {
                     />
                 </div>
 
-
                 <div className="mb-6">
                     <h3 className="text-2xl font-bold mb-4">Change Password</h3>
                     <input
@@ -181,7 +177,6 @@ const ProfileManagementPage = () => {
                     />
                 </div>
 
-                {/* Save changes and delete user buttons */}
                 <div className="flex justify-between">
                     <button
                         onClick={handleSaveChanges}
@@ -197,7 +192,6 @@ const ProfileManagementPage = () => {
                         Delete Account
                     </button>
                 </div>
-
 
                 <div className="mt-8">
                     <h3 className="text-2xl font-bold mb-4">Past Events</h3>

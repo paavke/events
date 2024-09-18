@@ -39,14 +39,13 @@ public class EventController {
                 .collect(Collectors.toList());
     }
 
-    // EventController.java
+
     @GetMapping("/user/{userId}")
     public List<EventDTO> getEventsByUserId(@PathVariable String userId) {
         return eventService.getEventsByUserId(userId).stream()
                 .map(EventMapper::toDTO)
                 .collect(Collectors.toList());
     }
-
 
     @PostMapping
     public EventDTO createEvent(@RequestBody EventDTO eventDTO) {

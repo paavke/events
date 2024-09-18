@@ -1,9 +1,9 @@
 
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸’ì¿2J$34bc65fd-2d37-4bbb-8051-30e6bb2e9228
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸’ì¿2J$a56c1e49-2be5-4c69-814f-38714e30b479
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¹’ì¿2J$8c6f2a23-5cb4-4436-80d2-e642bfade0ac
-—
-java:S6204""zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8¤›áª 2
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¹’ì¿2J$d1bd8499-ff7b-4339-80fa-9237c59b5b74
+½
+java:S6204""zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8¤›áª 2J$04891826-ceca-4dbd-85f2-a7b5ab41bb7e
 i
-java:S1452C"&Remove usage of generic wildcard type.(§˜÷Å8Ã’ì¿2J$6f1ec3e3-9e55-457f-a2d0-100cb81d19da
+java:S1452C"&Remove usage of generic wildcard type.(§˜÷Å8Ã’ì¿2J$d560c5fa-6edd-44d5-a182-419281540b82

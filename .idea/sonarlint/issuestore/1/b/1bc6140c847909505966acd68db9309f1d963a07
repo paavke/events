@@ -1,9 +1,9 @@
 
 …
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8—À÷“œ2J$68b51467-85e5-44a3-9feb-f8a15fee3453
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8—À÷“œ2J$babd2507-be95-4354-9b92-bcea42e2ba85
 ½
-java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ò°°¬2J$654ebd44-38ac-4242-8071-e4a20ed86c2b
+java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ò°°¬2J$dcaac161-1b9e-4d0f-ab3a-1d88669fb9d1
 ½
-java:S6204'"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ù°°¬2J$b68e9995-ebf5-4019-85df-1bbdf497a1f3
+java:S6204'"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ù°°¬2J$4d441afb-e4ff-4275-bf48-410798363080
 ½
-java:S6204/"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8®ğ‰’2J$ca1db45a-563f-4c71-8151-80606275b0df
+java:S6204/"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8®ğ‰’2J$751fca6f-6102-4e59-afe7-90dadce7f9d1

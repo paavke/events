@@ -44,7 +44,7 @@ public class TaskController {
                 .map(TaskMapper::toDTO)
                 .collect(Collectors.toList());
 
-        System.out.println("Fetched Tasks: " + tasks);  // Add logging to inspect tasks
+        System.out.println("Fetched Tasks: " + tasks);
 
         return ResponseEntity.ok()
                 .header("Transfer-Encoding", "identity")
@@ -52,7 +52,6 @@ public class TaskController {
     }
 
 
-    // New method to get task by ID
     @GetMapping("/{id}")
     public TaskDTO getTaskById(@PathVariable("id") String id) {
         Task task = taskService.getTaskById(id);

@@ -21,11 +21,9 @@ const EventDetailsPage = () => {
                     Authorization: `Bearer ${token}`,
                 };
 
-
                 const eventResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/events/1.0/${eventId}?apikey=${config.apikey}`, { headers });
                 setEvent(eventResponse.data);
                 setUpdatedEvent(eventResponse.data);
-
 
                 const participantsResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/participants/1.0/event/${eventId}?apikey=${config.apikey}`, { headers });
                 setParticipants(participantsResponse.data);

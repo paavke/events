@@ -13,7 +13,7 @@ const EventsListPage = () => {
     const [filterType, setFilterType] = useState('');
     const navigate = useNavigate();
 
-    // Fetch Events from API
+    // fetch events to display as list to choose from
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -40,11 +40,11 @@ const EventsListPage = () => {
         }
     }, [userId]);
 
+    // add filter and search for easier access
 
     const filteredEvents = events.filter(event => {
 
         const nameMatch = event.name.toLowerCase().includes(searchTerm.toLowerCase());
-
 
         const currentDate = new Date();
         let dateMatch = true;
@@ -71,7 +71,6 @@ const EventsListPage = () => {
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-3xl font-bold mb-6">Events List</h2>
 
-
                 <input
                     type="text"
                     placeholder="Search by event name"
@@ -80,7 +79,6 @@ const EventsListPage = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                 />
 
-                {/* Filter by Date */}
                 <div className="flex space-x-4 mb-4">
                     <select
                         value={filterType}
@@ -100,7 +98,6 @@ const EventsListPage = () => {
                     />
                 </div>
 
-                {/* List of Filtered Events */}
                 <ul>
                     {filteredEvents.map((event) => (
                         <li

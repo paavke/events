@@ -32,7 +32,6 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Update an existing user
     public User updateUser(String id, User userDetails) {
         return userRepository.findById(id)
                 .map(user -> {
@@ -48,12 +47,12 @@ public class UserService {
                 });
     }
 
-    // Delete user by ID
+
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
 
-    // Update user profile (name, email, role)
+
     public User updateUserProfile(String id, User updatedUserData) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
         user.setName(updatedUserData.getName());
@@ -62,7 +61,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // Change user password
+
     public boolean changePassword(String id, PasswordChangeDTO passwordChangeDTO) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
         String hashedPassword = passwordEncoder.encode(passwordChangeDTO.getNewPassword());

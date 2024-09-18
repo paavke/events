@@ -13,7 +13,9 @@ const CreateEventPage = () => {
     const [loading, setLoading] = useState(false);
 
     useEffect(() => {
-        // Fetch all users to be listed in dropdowns
+
+        //fetch users to add them to event
+
         const fetchUsers = async () => {
             const token = localStorage.getItem('accessToken');
             const headers = {
@@ -49,26 +51,26 @@ const CreateEventPage = () => {
             date: eventDate,
             location: location,
             description: description,
-            userId: responsibleUser, // Responsible user ID
+            userId: responsibleUser,
         };
 
         try {
-            // First, create the event
+
             const eventResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/events/1.0?apikey=${config.apikey}`, eventData, { headers });
-            const createdEventId = eventResponse.data.id;  // Retrieve the created event's ID
+            const createdEventId = eventResponse.data.id;
 
             console.log("Event created with ID:", createdEventId);
 
-            // Then, create the participants one by one
             for (let participant of participants) {
                 const participantData = {
-                    eventId: createdEventId,  // Link participant to the created event
+                    eventId: createdEventId,
                     userId: participant.userId,
                     role: participant.role,
                 };
 
-                console.log("Posting participant data:", participantData);  // Log the participant data before sending
+                console.log("Posting participant data:", participantData);
 
+                //fetch participants (available users) to add them to events together with role
                 try {
                     const participantResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/participants/1.0?apikey=${config.apikey}`, participantData, { headers });
                     console.log("Participant posted successfully:", participantResponse.data);
@@ -84,7 +86,6 @@ const CreateEventPage = () => {
             setLoading(false);
         }
     };
-
 
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -104,7 +105,6 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Event Date</label>
                         <input
@@ -115,7 +115,6 @@ const CreateEventPage = () => {
                             required
                         />
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Location</label>
@@ -129,7 +128,6 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
                         <textarea
@@ -139,7 +137,6 @@ const CreateEventPage = () => {
                             placeholder="Enter event description"
                         />
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Event Responsible</label>
@@ -157,7 +154,6 @@ const CreateEventPage = () => {
                             ))}
                         </select>
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Participants</label>
@@ -195,7 +191,6 @@ const CreateEventPage = () => {
                         </button>
                     </div>
 
-                    {/* Submit Button */}
                     <div className="flex items-center justify-between">
                         <button
                             type="submit"

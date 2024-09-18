@@ -13,11 +13,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors().and().csrf().disable() // Disable CSRF if not using it
+                .cors().and().csrf().disable()
                 .authorizeHttpRequests(authz -> authz
-                        .requestMatchers("/", "/login").permitAll() // Allow public access to certain endpoints
-                        .requestMatchers("/dashboard/**").hasAuthority("user") // Require "user" role for dashboard
-                        .anyRequest().authenticated() // Require authentication for other requests
+                        .requestMatchers("/", "/login").permitAll()
+                        .requestMatchers("/dashboard/**").hasAuthority("user")
+                        .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.decoder(jwtDecoder()))

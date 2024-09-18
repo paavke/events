@@ -6,7 +6,7 @@ function HomePage() {
     return (
         <div className="min-h-screen bg-gradient-to-r from-blue-500 to-purple-600 text-white">
             <div className="container mx-auto py-16 px-4">
-                {/* Welcome Section */}
+
                 <div className="text-center mb-16">
                     <h1 className="text-6xl font-extrabold mb-4 tracking-wide drop-shadow-lg">
                         Welcome to the Event Management Platform
@@ -22,7 +22,6 @@ function HomePage() {
                     </Link>
                 </div>
 
-
                 <div className="text-center">
                     <h2 className="text-3xl font-bold mb-12">Key Features</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -35,7 +34,6 @@ function HomePage() {
                             </p>
                         </div>
 
-
                         <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow">
                             <FaTasks className="text-6xl text-purple-500 mb-4 mx-auto" />
                             <h3 className="text-2xl font-semibold mb-2">Efficient Task Management</h3>
@@ -44,7 +42,6 @@ function HomePage() {
                             </p>
                         </div>
 
-
                         <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow">
                             <FaCalendarAlt className="text-6xl text-green-500 mb-4 mx-auto" />
                             <h3 className="text-2xl font-semibold mb-2">Integrated Scheduling</h3>
@@ -52,7 +49,6 @@ function HomePage() {
                                 Streamline date selection and event planning with integrated scheduling tools.
                             </p>
                         </div>
-
 
                         <div className="bg-white text-gray-800 p-6 rounded-lg shadow-lg hover:shadow-2xl transition-shadow">
                             <FaComments className="text-6xl text-yellow-500 mb-4 mx-auto" />
@@ -63,7 +59,6 @@ function HomePage() {
                         </div>
                     </div>
                 </div>
-
 
                 <div className="text-center mt-16">
                     <Link

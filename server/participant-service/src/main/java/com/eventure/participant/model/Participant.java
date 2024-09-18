@@ -10,15 +10,10 @@ public class Participant {
 
     @Id
     private String id;
-
-    // Reference to User ID
     private String userId;
-
-    // Event ID to which this participant is linked
     private String eventId;
 
     private String role;
-    // Getters and Setters for all fields
 
     public String getRole() {
         return role;

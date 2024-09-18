@@ -56,13 +56,13 @@ public class UserController {
         userService.deleteUser(id);
     }
 
-    // Update user profile (name, email, role)
+
     @PutMapping("/{id}/profile")
     public ResponseEntity<UserDTO> updateUserProfile(@PathVariable String id, @RequestBody UserDTO userDTO) {
         return ResponseEntity.ok(UserMapper.toDTO(userService.updateUserProfile(id, UserMapper.toEntity(userDTO))));
     }
 
-    // Change user password
+
     @PutMapping("/{id}/change-password")
     public ResponseEntity<?> changePassword(@PathVariable String id, @RequestBody PasswordChangeDTO passwordChangeDTO) {
         boolean result = userService.changePassword(id, passwordChangeDTO);
@@ -73,7 +73,7 @@ public class UserController {
         }
     }
 
-    // Fetch past events from Event Service via RestTemplate
+
     @GetMapping("/{id}/past-events")
     public List<EventDTO> getPastEventsByUserId(@PathVariable String id) {
         String eventServiceUrl = "http://event-service/api/events/user/" + id + "/past-events";

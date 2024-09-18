@@ -28,11 +28,9 @@ const TaskDetailsPage = () => {
                 setTask(response.data);
                 setEditTaskData(response.data);
 
-
                 if (response.data.eventId) {
                     fetchEventName(response.data.eventId);
                 }
-
 
                 if (response.data.assigneeId) {
                     fetchAssigneeName(response.data.assigneeId);
@@ -44,7 +42,6 @@ const TaskDetailsPage = () => {
                 setLoading(false);
             }
         };
-
 
         const fetchUsers = async () => {
             try {
@@ -60,7 +57,6 @@ const TaskDetailsPage = () => {
             }
         };
 
-
         const fetchEventName = async (eventId) => {
             try {
                 const token = localStorage.getItem('accessToken');
@@ -74,7 +70,6 @@ const TaskDetailsPage = () => {
                 console.error('Failed to fetch event name:', error);
             }
         };
-
 
         const fetchAssigneeName = async (assigneeId) => {
             try {

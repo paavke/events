@@ -1,0 +1,9 @@
+
+…
+java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8—À÷“œ2J$68b51467-85e5-44a3-9feb-f8a15fee3453
+½
+java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ò°°¬2J$654ebd44-38ac-4242-8071-e4a20ed86c2b
+½
+java:S6204'"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8ù°°¬2J$b68e9995-ebf5-4019-85df-1bbdf497a1f3
+½
+java:S6204/"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8®ğ‰’2J$ca1db45a-563f-4c71-8151-80606275b0df

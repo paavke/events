@@ -1,32 +1,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import config from '../config/config';  // Assuming this contains your base URL and API key
+import config from '../config/config';
 
 const ProfileManagementPage = () => {
-    // Fetch userId from localStorage
-    const userId = localStorage.getItem('userId');  // Assuming the userId is stored in localStorage
 
-    // State for managing user profile data
+    const userId = localStorage.getItem('userId');
+
+
     const [user, setUser] = useState({
         name: '',
         email: '',
         role: ''
     });
 
-    // State for managing password change
+
     const [password, setPassword] = useState({
         newPassword: ''
     });
 
-    // State for past events and tasks
+
     const [pastEvents, setPastEvents] = useState([]);
     const [pastTasks, setPastTasks] = useState([]);
 
-    // Loading and error states
+
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
-    // Fetch user profile, events, and tasks on component mount
+
     useEffect(() => {
         if (!userId) {
             console.error('No userId found in localStorage');
@@ -37,23 +37,23 @@ const ProfileManagementPage = () => {
 
         const fetchUserProfile = async () => {
             try {
-                const token = localStorage.getItem('accessToken');  // Assuming token-based authentication
+                const token = localStorage.getItem('accessToken');
                 const headers = { Authorization: `Bearer ${token}` };
 
-                // Log userId to check what is being used
+
                 console.log("Fetching data for userId:", userId);
 
-                // Fetch user profile
+
                 const userResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/users/1.0/${userId}?apikey=${config.apikey}`, { headers });
                 console.log("User profile response:", userResponse.data);
                 setUser(userResponse.data);
 
-                // Fetch user's past events
+
                 const eventsResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/events/1.0/user/${userId}?apikey=${config.apikey}`, { headers });
                 console.log("Fetched past events:", eventsResponse.data);
-                setPastEvents(eventsResponse.data);  // proveri da li stvarno fetchuje past events, dodaj neke u database
+                setPastEvents(eventsResponse.data);
 
-                // Fetch user's past tasks
+
                 const tasksResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/tasks/1.0/assignee/${userId}?apikey=${config.apikey}`, { headers });
                 console.log("Fetched past tasks:", tasksResponse.data);
                 setPastTasks(tasksResponse.data);
@@ -69,30 +69,30 @@ const ProfileManagementPage = () => {
         fetchUserProfile();
     }, [userId]);
 
-    // Handle input changes for profile form
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setUser(prevUser => ({ ...prevUser, [name]: value }));
     };
 
-    // Handle password change input
+
     const handlePasswordChange = (e) => {
         const { value } = e.target;
         setPassword({ newPassword: value });
     };
 
-    // Save changes to profile
+
     const handleSaveChanges = async () => {
         try {
             const token = localStorage.getItem('accessToken');
             const headers = { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' };
 
-            // Update user profile (name, email, and role)
+
             console.log("Saving updated user profile...", user);
             await axios.put(`${config.baseURL}/apiman-gateway/default/users/1.0/${userId}/profile?apikey=${config.apikey}`, user, { headers });
             console.log("User profile updated successfully");
 
-            // Update password if a new password is provided
+
             if (password.newPassword) {
                 console.log("Changing user password...");
                 await axios.put(`${config.baseURL}/apiman-gateway/default/users/1.0/${userId}/change-password?apikey=${config.apikey}`, { password: password.newPassword }, { headers });
@@ -106,6 +106,30 @@ const ProfileManagementPage = () => {
         }
     };
 
+
+    const handleDeleteUser = async () => {
+        if (!window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) return;
+
+        try {
+            const token = localStorage.getItem('accessToken');
+            const headers = { Authorization: `Bearer ${token}` };
+
+
+            await axios.delete(`${config.baseURL}/apiman-gateway/default/users/1.0/${userId}?apikey=${config.apikey}`, { headers });
+            console.log("User profile deleted successfully");
+
+            alert('Your account has been deleted');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('accessToken');
+
+
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error deleting user:', error);
+            alert('Failed to delete your account');
+        }
+    };
+
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
 
@@ -114,7 +138,7 @@ const ProfileManagementPage = () => {
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-3xl font-bold mb-6">Profile Management</h2>
 
-                {/* Editable user information */}
+
                 <div className="mb-6">
                     <label className="block text-gray-700">Name:</label>
                     <input
@@ -144,7 +168,7 @@ const ProfileManagementPage = () => {
                     />
                 </div>
 
-                {/* Password change section */}
+
                 <div className="mb-6">
                     <h3 className="text-2xl font-bold mb-4">Change Password</h3>
                     <input
@@ -157,15 +181,24 @@ const ProfileManagementPage = () => {
                     />
                 </div>
 
-                {/* Save changes button */}
-                <button
-                    onClick={handleSaveChanges}
-                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                >
-                    Save Changes
-                </button>
+                {/* Save changes and delete user buttons */}
+                <div className="flex justify-between">
+                    <button
+                        onClick={handleSaveChanges}
+                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Save Changes
+                    </button>
 
-                {/* Past events and tasks */}
+                    <button
+                        onClick={handleDeleteUser}
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                    >
+                        Delete Account
+                    </button>
+                </div>
+
+
                 <div className="mt-8">
                     <h3 className="text-2xl font-bold mb-4">Past Events</h3>
                     {pastEvents.length > 0 ? (

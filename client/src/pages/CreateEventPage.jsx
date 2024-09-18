@@ -40,7 +40,7 @@ const CreateEventPage = () => {
         setLoading(true);
         const token = localStorage.getItem('accessToken');
         const headers = {
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
             'Content-Type': 'application/json',
         };
 
@@ -50,27 +50,24 @@ const CreateEventPage = () => {
             location: location,
             description: description,
             userId: responsibleUser, // Responsible user ID
-            participants: participants.map(p => ({ userId: p.userId, role: p.role })), // Send participants directly within the event creation payload if supported
         };
-
-        console.log("Creating event with data:", eventData); // Log the event data before sending
 
         try {
             // First, create the event
             const eventResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/events/1.0?apikey=${config.apikey}`, eventData, { headers });
-            const createdEventId = eventResponse.data.id; // Assuming response contains the event ID
+            const createdEventId = eventResponse.data.id;  // Retrieve the created event's ID
 
             console.log("Event created with ID:", createdEventId);
 
-            // Then, create the participants one by one and link them to the event
+            // Then, create the participants one by one
             for (let participant of participants) {
                 const participantData = {
-                    eventId: createdEventId, // Link participant to the created event
+                    eventId: createdEventId,  // Link participant to the created event
                     userId: participant.userId,
-                    role: participant.role
+                    role: participant.role,
                 };
 
-                console.log("Posting participant data:", participantData); // Log the participant data before sending
+                console.log("Posting participant data:", participantData);  // Log the participant data before sending
 
                 try {
                     const participantResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/participants/1.0?apikey=${config.apikey}`, participantData, { headers });
@@ -88,12 +85,13 @@ const CreateEventPage = () => {
         }
     };
 
+
     return (
         <div className="min-h-screen bg-gray-100 flex items-center justify-center">
             <div className="bg-white shadow-md rounded-lg p-8 w-full max-w-lg">
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">Create New Event</h2>
                 <form onSubmit={handleSubmit}>
-                    {/* Event Name */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Event Name</label>
                         <input
@@ -106,7 +104,7 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-                    {/* Event Date */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Event Date</label>
                         <input
@@ -118,7 +116,7 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-                    {/* Location */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Location</label>
                         <input
@@ -131,7 +129,7 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-                    {/* Description */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Description</label>
                         <textarea
@@ -142,7 +140,7 @@ const CreateEventPage = () => {
                         />
                     </div>
 
-                    {/* Responsible User */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Event Responsible</label>
                         <select
@@ -160,7 +158,7 @@ const CreateEventPage = () => {
                         </select>
                     </div>
 
-                    {/* Participants Section */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2">Participants</label>
                         {participants.map((participant, index) => (

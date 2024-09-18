@@ -8,8 +8,9 @@ const CreateTaskPage = () => {
         title: '',
         description: '',
         deadline: '',
-        eventId: '', // Optional now
-        assigneeId: ''
+        eventId: '',
+        assigneeId: '',
+        status: ''
     });
     const [events, setEvents] = useState([]);
     const [users, setUsers] = useState([]);
@@ -17,19 +18,19 @@ const CreateTaskPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    // Fetch events and users when the page loads
     useEffect(() => {
         const fetchEvents = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
                 const headers = { Authorization: `Bearer ${token}` };
 
-                // Assuming userId is stored in localStorage
+
                 const userId = localStorage.getItem('userId');
 
-                // Fetch events only for the logged-in user
+
                 const eventsResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/events/1.0/user/${userId}?apikey=${config.apikey}`, { headers });
                 setEvents(eventsResponse.data);
-                console.log(eventsResponse.data);
             } catch (error) {
                 console.error('Failed to fetch events:', error);
             }
@@ -103,7 +104,7 @@ const CreateTaskPage = () => {
                         />
                     </div>
 
-                    {/* Task Description */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700">Task Description</label>
                         <textarea
@@ -115,7 +116,7 @@ const CreateTaskPage = () => {
                         />
                     </div>
 
-                    {/* Task Deadline */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700">Deadline</label>
                         <input
@@ -128,9 +129,9 @@ const CreateTaskPage = () => {
                         />
                     </div>
 
-                    {/* Related Event (Optional) */}
+
                     <div className="mb-4">
-                        <label className="block text-gray-700">Related Event (Optional)</label>
+                        <label className="block text-gray-700">Related Event</label>
                         <select
                             name="eventId"
                             value={task.eventId}
@@ -146,7 +147,7 @@ const CreateTaskPage = () => {
                         </select>
                     </div>
 
-                    {/* Task Assignee */}
+
                     <div className="mb-4">
                         <label className="block text-gray-700">Assignee</label>
                         <select
@@ -162,6 +163,23 @@ const CreateTaskPage = () => {
                                     {user.name}
                                 </option>
                             ))}
+                        </select>
+                    </div>
+
+
+                    <div className="mb-4">
+                        <label className="block text-gray-700">Status</label>
+                        <select
+                            name="status"
+                            value={task.status}
+                            onChange={handleChange}
+                            className="w-full p-2 border rounded"
+                            required
+                        >
+                            <option value="">Select status</option>
+                            <option value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Completed">Completed</option>
                         </select>
                     </div>
 

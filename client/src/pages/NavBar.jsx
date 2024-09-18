@@ -2,14 +2,14 @@ import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
 const NavBar = () => {
-    const userId = localStorage.getItem('userId');  // Assuming the userId is stored in localStorage
+    const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
 
-    // Logout function to clear localStorage and navigate to login page
+
     const handleLogout = () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('accessToken');
-        navigate('/login');  // Navigate to login page after logout
+        navigate('/login');
     };
 
     return (
@@ -24,7 +24,7 @@ const NavBar = () => {
                     <Link to="/tasks" className="text-white">Tasks</Link>
                     <Link to="/profile" className="text-white">Profile</Link>
 
-                    {/* Conditionally show the Dashboard link only if userId exists */}
+
 
                 </div>
                 <div className="text-white">

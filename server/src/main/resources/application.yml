@@ -1,0 +1,22 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/eventure
+      database: eventure
+server:
+  port: 8081
+
+keycloak:
+  realm: eventure
+  auth-server-url: http://localhost:8180/auth
+  resource: eventure-backend
+  credentials:
+    secret: 9oGKFz5Z2G7ckYvKvo3xcFF5W9cJOfvy
+  bearer-only: true
+  security-constraints:
+    - authRoles:
+        - user
+      securityCollections:
+        - patterns:
+            - /api/*
+

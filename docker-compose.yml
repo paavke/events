@@ -1,0 +1,114 @@
+version: '3'
+services:
+
+  mongo_db:
+    image: mongo:4.4
+    networks:
+      - app-network
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+
+
+  keycloak:
+    image: jboss/keycloak:16.1.0
+    environment:
+      - KEYCLOAK_USER=danilo
+      - KEYCLOAK_PASSWORD=test
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - mongo_db
+
+
+  apiman:
+    image: jboss/wildfly:10.1.0.Final
+    volumes:
+      - ./apiman-distro-wildfly10-1.5.5.Final-overlay:/opt/jboss/wildfly
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+    depends_on:
+      - mongo_db
+    command: ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-apiman.xml"]
+
+
+  user-service:
+    build:
+      context: ./server/user-service
+    ports:
+      - "8083:8081"
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
+      - SPRING_DATA_MONGODB_DATABASE=users
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
+
+
+  event-service:
+    build:
+      context: ./server/event-service
+    ports:
+      - "8082:8081"
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
+      - SPRING_DATA_MONGODB_DATABASE=events
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
+
+
+  task-service:
+    build:
+      context: ./server/task-service
+    ports:
+      - "8084:8081"
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
+      - SPRING_DATA_MONGODB_DATABASE=tasks
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
+
+
+  participant-service:
+    build:
+      context: ./server/participant-service
+    ports:
+      - "8085:8081"
+    networks:
+      - app-network
+    environment:
+      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
+      - SPRING_DATA_MONGODB_DATABASE=participants
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
+      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
+
+
+  frontend:
+    build:
+      context: ./client
+    ports:
+      - "3000:80"
+    networks:
+      - app-network
+    depends_on:
+      - user-service
+      - event-service
+      - participant-service
+      - task-service
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongo_data:

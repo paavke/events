@@ -4,13 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import config from '../config/config';
 
 const EventsListPage = () => {
-    const userId = localStorage.getItem('userId');  // Get userId from localStorage
+    const userId = localStorage.getItem('userId');
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [searchTerm, setSearchTerm] = useState(''); // For searching by name
-    const [filterDate, setFilterDate] = useState(''); // For date filter
-    const [filterType, setFilterType] = useState(''); // Past/Future filter
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filterDate, setFilterDate] = useState('');
+    const [filterType, setFilterType] = useState('');
     const navigate = useNavigate();
 
     // Fetch Events from API
@@ -40,12 +40,12 @@ const EventsListPage = () => {
         }
     }, [userId]);
 
-    // Handle filtering and searching
+
     const filteredEvents = events.filter(event => {
-        // Search by name
+
         const nameMatch = event.name.toLowerCase().includes(searchTerm.toLowerCase());
 
-        // Filter by past, future, or specific date
+
         const currentDate = new Date();
         let dateMatch = true;
         if (filterType === 'future') {
@@ -53,7 +53,7 @@ const EventsListPage = () => {
         } else if (filterType === 'past') {
             dateMatch = new Date(event.date) < currentDate;
         } else if (filterDate) {
-            dateMatch = new Date(event.date).toISOString().split('T')[0] === filterDate; // Match exact date
+            dateMatch = new Date(event.date).toISOString().split('T')[0] === filterDate;
         }
 
         return nameMatch && dateMatch;
@@ -71,7 +71,7 @@ const EventsListPage = () => {
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-3xl font-bold mb-6">Events List</h2>
 
-                {/* Search by Name */}
+
                 <input
                     type="text"
                     placeholder="Search by event name"

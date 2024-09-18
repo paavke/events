@@ -10,13 +10,13 @@ const TaskDetailsPage = () => {
     const [error, setError] = useState(null);
     const [isEditing, setIsEditing] = useState(false);
     const [editTaskData, setEditTaskData] = useState({});
-    const [eventName, setEventName] = useState('');  // Store event name
-    const [assigneeName, setAssigneeName] = useState('');  // Store assignee's name
+    const [eventName, setEventName] = useState('');
+    const [assigneeName, setAssigneeName] = useState('');
     const [users, setUsers] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch task details
+
         const fetchTaskDetails = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
@@ -28,12 +28,12 @@ const TaskDetailsPage = () => {
                 setTask(response.data);
                 setEditTaskData(response.data);
 
-                // If the task has a related event, fetch its name
+
                 if (response.data.eventId) {
                     fetchEventName(response.data.eventId);
                 }
 
-                // If the task has an assignee, fetch their name
+
                 if (response.data.assigneeId) {
                     fetchAssigneeName(response.data.assigneeId);
                 }
@@ -45,7 +45,7 @@ const TaskDetailsPage = () => {
             }
         };
 
-        // Fetch users for the dropdown
+
         const fetchUsers = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
@@ -60,7 +60,7 @@ const TaskDetailsPage = () => {
             }
         };
 
-        // Fetch event name by eventId
+
         const fetchEventName = async (eventId) => {
             try {
                 const token = localStorage.getItem('accessToken');
@@ -75,7 +75,7 @@ const TaskDetailsPage = () => {
             }
         };
 
-        // Fetch assignee name by assigneeId
+
         const fetchAssigneeName = async (assigneeId) => {
             try {
                 const token = localStorage.getItem('accessToken');
@@ -84,7 +84,7 @@ const TaskDetailsPage = () => {
                 };
 
                 const response = await axios.get(`${config.baseURL}/apiman-gateway/default/users/1.0/${assigneeId}?apikey=${config.apikey}`, { headers });
-                setAssigneeName(response.data.name);  // Set the assignee name
+                setAssigneeName(response.data.name);
             } catch (error) {
                 console.error('Failed to fetch assignee name:', error);
             }
@@ -149,7 +149,7 @@ const TaskDetailsPage = () => {
 
                 {isEditing ? (
                     <div>
-                        {/* Editable form fields */}
+
                         <div className="mb-4">
                             <strong>Task Title:</strong>
                             <input
@@ -191,7 +191,7 @@ const TaskDetailsPage = () => {
                                 className="w-full p-2 border rounded"
                             >
                                 <option value="">Select Event</option>
-                                {/* List events if needed */}
+
                             </select>
                         </div>
 
@@ -221,7 +221,7 @@ const TaskDetailsPage = () => {
                     </div>
                 ) : (
                     <div>
-                        {/* View mode - display data */}
+
                         <div className="mb-4">
                             <strong>Task Title:</strong> {task.title}
                         </div>

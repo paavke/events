@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/server/event-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/event-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/participant-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/participant-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/task-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/task-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/user-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/user-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/websocket-service/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/server/websocket-service/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/src/main/resources" charset="UTF-8" />
+  </component>
+</project>

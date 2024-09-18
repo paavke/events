@@ -39,7 +39,7 @@ function LoginPage() {
             if (response.ok) {
                 localStorage.setItem('accessToken', data.access_token);
                 localStorage.setItem('refreshToken', data.refresh_token);
-                navigate('/admin');  // Redirect to HomePage after successful login
+                navigate('/admin');
             } else {
                 setError(data.error_description || 'Invalid username or password');
             }

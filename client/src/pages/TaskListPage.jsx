@@ -7,7 +7,7 @@ const TaskListPage = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const navigate = useNavigate();  // Initialize useNavigate for navigation
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchTasks = async () => {
@@ -31,11 +31,11 @@ const TaskListPage = () => {
     }, []);
 
     const handleTaskClick = (taskId) => {
-        navigate(`/task-details/${taskId}`);  // Navigate to the task details page when a task is clicked
+        navigate(`/task-details/${taskId}`);
     };
 
     const handleCreateTask = () => {
-        navigate('/create-task');  // Navigate to the Create Task page
+        navigate('/create-task');
     };
 
     if (loading) return <p>Loading...</p>;
@@ -46,7 +46,7 @@ const TaskListPage = () => {
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-3xl font-bold mb-6">Task List</h2>
 
-                {/* Create Task Button */}
+
                 <div className="flex justify-end mb-4">
                     <button
                         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"

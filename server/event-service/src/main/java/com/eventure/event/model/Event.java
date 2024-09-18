@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Document(collection = "events")
 public class Event {
@@ -16,10 +19,11 @@ public class Event {
     private String name;
 
     @NotNull(message = "Event date is required")
-    private String date;
+    private LocalDateTime date;
 
     private String location;
     private String description;
+    private String userId;
 
 
     public String getId() {
@@ -38,11 +42,11 @@ public class Event {
         this.name = name;
     }
 
-    public String getDate() {
+    public LocalDateTime getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDateTime date) {
         this.date = date;
     }
 
@@ -60,5 +64,13 @@ public class Event {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

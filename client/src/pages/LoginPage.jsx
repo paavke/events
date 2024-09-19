@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import config from '../config/config.js';
 
 function LoginPage() {
@@ -20,15 +21,13 @@ function LoginPage() {
                 password: password
             });
 
-            const response = await fetch(`${config.baseURL}/auth/realms/${config.realm}/protocol/openid-connect/token`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: body.toString(),
-            });
+            const response = await axios.post(
+                `${config.baseURL}/auth/realms/${config.realm}/protocol/openid-connect/token`,
+                body.toString(),
+                { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
+            );
 
-            const data = await response.json();
+            const data = response.data;
 
             if (data.error) {
                 console.error('Error description:', data.error_description);
@@ -36,13 +35,9 @@ function LoginPage() {
                 return;
             }
 
-            if (response.ok) {
-                localStorage.setItem('accessToken', data.access_token);
-                localStorage.setItem('refreshToken', data.refresh_token);
-                navigate('/admin');
-            } else {
-                setError(data.error_description || 'Invalid username or password');
-            }
+            localStorage.setItem('accessToken', data.access_token);
+            localStorage.setItem('refreshToken', data.refresh_token);
+            navigate('/admin');
         } catch (error) {
             setError('Login failed');
             console.error('Login failed', error);

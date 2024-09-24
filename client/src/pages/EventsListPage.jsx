@@ -13,7 +13,7 @@ const EventsListPage = () => {
     const [filterType, setFilterType] = useState('');
     const navigate = useNavigate();
 
-    // fetch events to display as list to choose from
+
     useEffect(() => {
         const fetchEvents = async () => {
             try {
@@ -40,7 +40,6 @@ const EventsListPage = () => {
         }
     }, [userId]);
 
-    // add filter and search for easier access
 
     const filteredEvents = events.filter(event => {
 

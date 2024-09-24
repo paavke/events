@@ -14,7 +14,7 @@ const CreateEventPage = () => {
 
     useEffect(() => {
 
-        //fetch users to add them to event
+
 
         const fetchUsers = async () => {
             const token = localStorage.getItem('accessToken');
@@ -70,7 +70,6 @@ const CreateEventPage = () => {
 
                 console.log("Posting participant data:", participantData);
 
-                //fetch participants (available users) to add them to events together with role
                 try {
                     const participantResponse = await axios.post(`${config.baseURL}/apiman-gateway/default/participants/1.0?apikey=${config.apikey}`, participantData, { headers });
                     console.log("Participant posted successfully:", participantResponse.data);

@@ -18,16 +18,13 @@ const CreateTaskPage = () => {
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
-    // fetch events and users
     useEffect(() => {
         const fetchEvents = async () => {
             try {
                 const token = localStorage.getItem('accessToken');
                 const headers = { Authorization: `Bearer ${token}` };
 
-
                 const userId = localStorage.getItem('userId');
-
 
                 const eventsResponse = await axios.get(`${config.baseURL}/apiman-gateway/default/events/1.0/user/${userId}?apikey=${config.apikey}`, { headers });
                 setEvents(eventsResponse.data);
@@ -60,7 +57,7 @@ const CreateTaskPage = () => {
         }));
     };
 
-    //post task
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -71,7 +68,7 @@ const CreateTaskPage = () => {
                 'Content-Type': 'application/json',
             };
 
-            //post task to back
+
             await axios.post(`${config.baseURL}/apiman-gateway/default/tasks/1.0?apikey=${config.apikey}`, task, { headers });
 
             setLoading(false);
@@ -105,7 +102,6 @@ const CreateTaskPage = () => {
                         />
                     </div>
 
-
                     <div className="mb-4">
                         <label className="block text-gray-700">Task Description</label>
                         <textarea
@@ -116,7 +112,6 @@ const CreateTaskPage = () => {
                             required
                         />
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700">Deadline</label>
@@ -129,7 +124,6 @@ const CreateTaskPage = () => {
                             required
                         />
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700">Related Event</label>
@@ -147,7 +141,6 @@ const CreateTaskPage = () => {
                             ))}
                         </select>
                     </div>
-
 
                     <div className="mb-4">
                         <label className="block text-gray-700">Assignee</label>

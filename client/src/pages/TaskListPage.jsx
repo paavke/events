@@ -17,8 +17,24 @@ const TaskListPage = () => {
                     Authorization: `Bearer ${token}`,
                 };
 
-                const response = await axios.get(`${config.baseURL}/apiman-gateway/default/tasks/1.0?apikey=${config.apikey}`, { headers });
-                setTasks(response.data);
+                const response = await axios.get(
+                    `${config.baseURL}/apiman-gateway/default/tasks/1.0?apikey=${config.apikey}`,
+                    { headers }
+                );
+
+                console.log("API response:", response.data);
+
+                const data = response.data;
+
+                if (Array.isArray(data)) {
+                    setTasks(data);
+                } else if (Array.isArray(data.tasks)) {
+                    setTasks(data.tasks);
+                } else {
+                    console.error("Unexpected task format:", data);
+                    setTasks([]);
+                }
+
                 setLoading(false);
             } catch (error) {
                 console.error('Failed to fetch tasks:', error);

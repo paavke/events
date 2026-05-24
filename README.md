@@ -1,245 +1,210 @@
-\# Eventure
+﻿# Eventure
 
 
-
-\## Overview
-
+## Overview
 
 
 Eventure is a full-stack event management platform designed to simplify the organization and management of events, tasks, participants, and users.
 
 
-
-The application follows a \*\*microservices architecture\*\* and combines a \*\*React frontend\*\* with multiple \*\*Spring Boot backend services\*\*. It integrates \*\*Keycloak\*\* for authentication and authorization, \*\*Apiman\*\* as an API gateway, \*\*MongoDB\*\* for data persistence, and \*\*Docker\*\* for local infrastructure management.
-
+The application follows a **microservices architecture** and combines a **React frontend** with multiple **Spring Boot backend services**. It integrates **Keycloak** for authentication and authorization, **Apiman** as an API gateway, **MongoDB** for data persistence, and **Docker** for local infrastructure management.
 
 
 This project demonstrates full-stack development, distributed architecture principles, REST API communication, authentication flows, API management, and containerized deployment.
 
 
+---
 
-\---
 
+## Features
 
 
-\## Features
+### Authentication & Security
 
+- User authentication with Keycloak
 
+- Role-based access control
 
-\### Authentication \& Security
+- Protected API access
 
-\- User authentication with Keycloak
+- Token-based authentication
 
-\- Role-based access control
 
-\- Protected API access
+### Event Management
 
-\- Token-based authentication
+- Create events
 
+- Update event information
 
+- Manage event lifecycle
 
-\### Event Management
+- View event details
 
-\- Create events
 
-\- Update event information
+### Task Management
 
-\- Manage event lifecycle
+- Create and manage event-related tasks
 
-\- View event details
+- Track responsibilities
 
+- Update task progress
 
 
-\### Task Management
+### Participant Management
 
-\- Create and manage event-related tasks
+- Add participants to events
 
-\- Track responsibilities
+- Manage participant information
 
-\- Update task progress
+- Associate users with event activities
 
 
+### Microservices Architecture
 
-\### Participant Management
+- Independent backend services
 
-\- Add participants to events
+- Separation of business domains
 
-\- Manage participant information
+- REST communication between components
 
-\- Associate users with event activities
+- API management using Apiman
 
 
+---
 
-\### Microservices Architecture
 
-\- Independent backend services
+## Technology Stack
 
-\- Separation of business domains
 
-\- REST communication between components
+### Frontend
 
-\- API management using Apiman
+- React
 
+- Tailwind CSS
 
+- JavaScript
 
-\---
 
+### Backend
 
+- Java 17
 
-\## Technology Stack
+- Spring Boot
 
+- Maven
 
 
-\### Frontend
+### Database
 
-\- React
+- MongoDB
 
-\- Tailwind CSS
 
-\- JavaScript
+### Authentication & API Management
 
+- Keycloak
 
+- Apiman API Gateway
 
-\### Backend
 
-\- Java 17
+### DevOps & Tools
 
-\- Spring Boot
+- Docker
 
-\- Maven
+- Docker Compose
 
+- Git
 
+- IntelliJ IDEA
 
-\### Database
 
-\- MongoDB
+---
 
 
-
-\### Authentication \& API Management
-
-\- Keycloak
-
-\- Apiman API Gateway
-
-
-
-\### DevOps \& Tools
-
-\- Docker
-
-\- Docker Compose
-
-\- Git
-
-\- IntelliJ IDEA
-
-
-
-\---
-
-
-
-\## Architecture
-
+## Architecture
 
 
 The backend is divided into independent microservices, each responsible for a specific business domain.
 
 
-
-\### Services
-
+### Services
 
 
-\- \*\*User Service\*\* → user management and profiles  
+- **User Service** ΓåÆ user management and profiles  
 
-\- \*\*Event Service\*\* → event creation and management  
+- **Event Service** ΓåÆ event creation and management  
 
-\- \*\*Task Service\*\* → task management  
+- **Task Service** ΓåÆ task management  
 
-\- \*\*Participant Service\*\* → participant handling  
-
-
-
-The frontend communicates with backend services through APIs managed by \*\*Apiman\*\*, while \*\*Keycloak\*\* secures authentication and authorization flows.
+- **Participant Service** ΓåÆ participant handling  
 
 
-
-\---
-
+The frontend communicates with backend services through APIs managed by **Apiman**, while **Keycloak** secures authentication and authorization flows.
 
 
-\## Project Structure
+---
 
+
+## Project Structure
 
 
 ```text
 
-events\_Danilo\_Pavicevic/
+events_Danilo_Pavicevic/
 
-│
+Γöé
 
-├── client/                     # React frontend
+Γö£ΓöÇΓöÇ client/                     # React frontend
 
-│
+Γöé
 
-├── server/
+Γö£ΓöÇΓöÇ server/
 
-│   ├── user-service/           # User service
+Γöé   Γö£ΓöÇΓöÇ user-service/           # User service
 
-│   ├── event-service/          # Event service
+Γöé   Γö£ΓöÇΓöÇ event-service/          # Event service
 
-│   ├── task-service/           # Task service
+Γöé   Γö£ΓöÇΓöÇ task-service/           # Task service
 
-│   └── participant-service/    # Participant service
+Γöé   ΓööΓöÇΓöÇ participant-service/    # Participant service
 
-│
+Γöé
 
-├── docker-compose.yml          # Infrastructure setup
+Γö£ΓöÇΓöÇ docker-compose.yml          # Infrastructure setup
 
-├── Dockerfile
+Γö£ΓöÇΓöÇ Dockerfile
 
-└── README.md
+ΓööΓöÇΓöÇ README.md
 
 ```
 
 
-
-\---
-
+---
 
 
-\## Running the Project Locally
+## Running the Project Locally
 
 
-
-\### Prerequisites
-
+### Prerequisites
 
 
 Before running the project, make sure the following tools are installed:
 
 
+- Java 17
 
-\- Java 17
+- Maven
 
-\- Maven
+- Node.js + npm
 
-\- Node.js + npm
+- Docker Desktop
 
-\- Docker Desktop
-
-\- Git
-
+- Git
 
 
-\---
+---
 
 
-
-\### 1. Clone the Repository
-
+### 1. Clone the Repository
 
 
 ```bash
@@ -251,17 +216,13 @@ cd events
 ```
 
 
-
-\---
-
+---
 
 
-\### 2. Start Infrastructure
-
+### 2. Start Infrastructure
 
 
 Start containers (MongoDB, Keycloak, Apiman, and dependencies if configured):
-
 
 
 ```bash
@@ -271,21 +232,16 @@ docker compose up -d
 ```
 
 
-
-\---
-
+---
 
 
-\### 3. Start Backend Services
-
+### 3. Start Backend Services
 
 
 Open separate terminals and run:
 
 
-
-\#### User Service
-
+#### User Service
 
 
 ```bash
@@ -297,9 +253,7 @@ mvn spring-boot:run
 ```
 
 
-
-\#### Event Service
-
+#### Event Service
 
 
 ```bash
@@ -311,9 +265,7 @@ mvn spring-boot:run
 ```
 
 
-
-\#### Task Service
-
+#### Task Service
 
 
 ```bash
@@ -325,9 +277,7 @@ mvn spring-boot:run
 ```
 
 
-
-\#### Participant Service
-
+#### Participant Service
 
 
 ```bash
@@ -339,17 +289,13 @@ mvn spring-boot:run
 ```
 
 
-
-\---
-
+---
 
 
-\### 4. Start Frontend
-
+### 4. Start Frontend
 
 
 Open another terminal:
-
 
 
 ```bash
@@ -363,9 +309,7 @@ npm run dev
 ```
 
 
-
 The frontend will typically run on:
-
 
 
 ```text
@@ -375,85 +319,67 @@ http://localhost:5173
 ```
 
 
-
-\---
-
+---
 
 
-\## Authentication \& API Gateway
+## Authentication & API Gateway
 
 
-
-\### Keycloak
-
+### Keycloak
 
 
 Keycloak is used for:
 
 
+- User authentication
 
-\- User authentication
+- Role management
 
-\- Role management
+- Token-based authorization
 
-\- Token-based authorization
-
-\- Securing protected endpoints
-
+- Securing protected endpoints
 
 
-\### Apiman
-
+### Apiman
 
 
 Apiman is used as:
 
 
+- API Gateway
 
-\- API Gateway
+- API management layer
 
-\- API management layer
+- Service exposure and routing
 
-\- Service exposure and routing
-
-\- Centralized API access
-
+- Centralized API access
 
 
-\---
+---
 
 
-
-\## Screenshots
-
+## Screenshots
 
 
-\### Dashboard
+### Dashboard
 
 
-
-\_Add screenshot here\_
-
+_Add screenshot here_
 
 
-\### Event Management
+### Event Management
 
 
-
-\_Add screenshot here\_
-
+_Add screenshot here_
 
 
-\### Authentication
+### Authentication
 
 
-
-\_Add screenshot here\_
-
+_Add screenshot here_
 
 
 Example usage:
-
 
 
 ```md
@@ -463,41 +389,33 @@ Example usage:
 ```
 
 
-
-\---
-
+---
 
 
-\## Future Improvements
-
+## Future Improvements
 
 
 Possible future improvements include:
 
 
+- Real-time notifications
 
-\- Real-time notifications
+- WebSocket integration
 
-\- WebSocket integration
+- Advanced analytics dashboard
 
-\- Advanced analytics dashboard
+- Enhanced filtering and search
 
-\- Enhanced filtering and search
-
-\- Improved monitoring and logging
-
+- Improved monitoring and logging
 
 
-\---
+---
 
 
-
-\## Author
-
+## Author
 
 
-\*\*Danilo Pavicevic\*\*
-
+**Danilo Pavicevic**
 
 
 Software Engineering / Full-Stack Development Project

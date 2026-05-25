@@ -36,3 +36,10 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+
+.idea/
+client/.idea/
+target/
+node_modules/
+.env

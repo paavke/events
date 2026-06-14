@@ -1,12 +1,0 @@
-
-…
-java:S6813"BRemove this field injection and use constructor injection instead.(êæÄŞ8¸ÖâŸš2J$af0bc02b-4698-4451-8021-62c67e4ae237
-½
-java:S6204"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8¿ÖâŸš2J$a8ddcff3-d4e2-4ac7-8665-35b51473c6cd
-½
-java:S6204%"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8Ìí†¡š2J$38623a4e-9e85-43bf-94d5-439cfe1f7f2f
-½
-java:S6204-"zReplace this usage of 'Stream.collect(Collectors.toList())' with 'Stream.toList()' and ensure that the list is unmodified.(ª™¨¹8´©¼¶œ2J$28922979-0960-42fd-a1cd-6a9a36b732d4
-r	java:S106/"+Replace this use of System.out by a logger.(ŒÉ£ºùÿÿÿÿ8¸©¼¶œ2J$325d4dc0-8c31-4da7-937e-e5351d1196b8
-m
-java:S1068"*Remove this unused "LOGGER" private field.(šƒñ’8œó·œ2J$8dfec61e-734a-4842-8ac8-bb9f778def82

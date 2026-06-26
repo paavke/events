@@ -4,7 +4,7 @@ import com.eventure.user.dto.PasswordChangeDTO;
 import com.eventure.user.model.User;
 import com.eventure.user.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,19 +16,21 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
-
     public Optional<User> getUserById(String id) {
         return userRepository.findById(id);
     }
 
-
     public User createUser(User user) {
+        if (user.getPassword() != null && !user.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+        }
         return userRepository.save(user);
     }
 
@@ -47,20 +49,17 @@ public class UserService {
                 });
     }
 
-
     public void deleteUser(String id) {
         userRepository.deleteById(id);
     }
-
 
     public User updateUserProfile(String id, User updatedUserData) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));
         user.setName(updatedUserData.getName());
         user.setEmail(updatedUserData.getEmail());
-        user.setRole(updatedUserData.getRole());  // Manage role
+        user.setRole(updatedUserData.getRole());
         return userRepository.save(user);
     }
-
 
     public boolean changePassword(String id, PasswordChangeDTO passwordChangeDTO) {
         User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("User not found"));

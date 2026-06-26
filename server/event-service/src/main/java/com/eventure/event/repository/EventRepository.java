@@ -11,6 +11,6 @@ import java.util.List;
 public interface EventRepository extends MongoRepository<Event, String> {
 
     List<Event> findByUserId(String userId);
-    @Query("{'user.id': ?0, 'date': { $lt: new Date() }}")
+    @Query("{'userId': ?0, 'date': { $lt: new Date() }}")
     List<Event> findPastEventsByUserId(String userId);
 }

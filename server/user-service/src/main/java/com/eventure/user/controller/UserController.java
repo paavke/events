@@ -4,6 +4,7 @@ import com.eventure.user.dto.EventDTO;
 import com.eventure.user.dto.PasswordChangeDTO;
 import com.eventure.user.dto.TaskDTO;
 import com.eventure.user.dto.UserDTO;
+import com.eventure.user.config.ServiceUrlsProperties;
 import com.eventure.user.mapper.UserMapper;
 import com.eventure.user.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class UserController {
 
     @Autowired
     private RestTemplate restTemplate;
+
+    @Autowired
+    private ServiceUrlsProperties serviceUrls;
 
     @GetMapping
     public List<UserDTO> getAllUsers() {
@@ -76,7 +80,7 @@ public class UserController {
 
     @GetMapping("/{id}/past-events")
     public List<EventDTO> getPastEventsByUserId(@PathVariable String id) {
-        String eventServiceUrl = "http://event-service/api/events/user/" + id + "/past-events";
+        String eventServiceUrl = serviceUrls.getEventService().getUrl() + "/api/events/user/" + id + "/past-events";
 
         ResponseEntity<List<EventDTO>> response = restTemplate.exchange(
                 eventServiceUrl,
@@ -90,7 +94,7 @@ public class UserController {
 
     @GetMapping("/{id}/past-tasks")
     public List<TaskDTO> getPastTasksByUserId(@PathVariable String id) {
-        String taskServiceUrl = "http://task-service/api/tasks/user/" + id + "/past-tasks";
+        String taskServiceUrl = serviceUrls.getTaskService().getUrl() + "/api/tasks/assignee/" + id;
 
         ResponseEntity<List<TaskDTO>> response = restTemplate.exchange(
                 taskServiceUrl,

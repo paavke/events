@@ -1,98 +1,54 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import config from '../config/config';
+import apiClient, { apimanUrl } from '../services/apiClient';
 
 function AdminPage() {
     const [user, setUser] = useState({ name: '', email: '', password: '', role: '' });
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
-
-    const token = localStorage.getItem('accessToken');
     const navigate = useNavigate();
-
 
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const headers = {
-                    'Authorization': `Bearer ${token}`
-                };
-
-                console.log("Fetching users with headers:", headers);
-
-                const response = await axios.get(
-                    `${config.baseURL}/apiman-gateway/default/users/1.0?apikey=${config.apikey}`,
-                    { headers }
-                );
-
-                const usersData = Array.isArray(response.data) ? response.data : [];
-                console.log("Fetched users data -", usersData);
-                setUsers(usersData);
+                const response = await apiClient.get(apimanUrl('/users/1.0'));
+                setUsers(Array.isArray(response.data) ? response.data : []);
             } catch (error) {
-                console.error('Error fetching users -', error);
+                console.error('Error fetching users:', error);
                 setUsers([]);
             }
         };
 
-        if (token) {
-            console.log("Fetching users for token -", token);
+        if (localStorage.getItem('accessToken')) {
             fetchUsers();
-        } else {
-            console.log("No token found in localStorage");
         }
-    }, [token]);
-
+    }, []);
 
     const handleChange = (e) => {
-        setUser({
-            ...user,
-            [e.target.name]: e.target.value,
-        });
+        setUser({ ...user, [e.target.name]: e.target.value });
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setMessage('');
-        console.log("Submitting user creation with data:", user);
 
         try {
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            };
-
-            console.log("Sending POST request with headers:", headers);
-
-            const response = await axios.post(
-                `${config.baseURL}/apiman-gateway/default/users/1.0?apikey=${config.apikey}`,
-                user,
-                { headers }
-            );
-
-            console.log("POST response:", response);
+            const response = await apiClient.post(apimanUrl('/users/1.0'), user);
 
             if (response.status === 200) {
-                console.log("User created successfully:", response.data);
                 setMessage('User created successfully');
                 setUser({ name: '', email: '', password: '', role: '' });
-
-
                 navigate(`/dashboard/${response.data.id}`);
             } else {
-                console.log("Failed to create user. Status code:", response.status);
                 setMessage('Failed to create user');
             }
         } catch (error) {
             console.error('Error creating user:', error);
             setMessage('Error occurred while creating user');
         }
-    }
+    };
 
     const handleUserSelect = (userId) => {
-        console.log("Navigating to dashboard of user with ID:", userId);
-
         navigate(`/dashboard/${userId}`);
     };
 
@@ -104,51 +60,21 @@ function AdminPage() {
                 <form onSubmit={handleSubmit}>
                     <div className="mb-4">
                         <label className="block text-gray-700">Name</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={user.name}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            required
-                        />
+                        <input type="text" name="name" value={user.name} onChange={handleChange} className="w-full p-2 border rounded" required />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Email</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={user.email}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            required
-                        />
+                        <input type="email" name="email" value={user.email} onChange={handleChange} className="w-full p-2 border rounded" required />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Password</label>
-                        <input
-                            type="password"
-                            name="password"
-                            value={user.password}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            required
-                        />
+                        <input type="password" name="password" value={user.password} onChange={handleChange} className="w-full p-2 border rounded" required />
                     </div>
                     <div className="mb-4">
                         <label className="block text-gray-700">Role</label>
-                        <input
-                            type="text"
-                            name="role"
-                            value={user.role}
-                            onChange={handleChange}
-                            className="w-full p-2 border rounded"
-                            required
-                        />
+                        <input type="text" name="role" value={user.role} onChange={handleChange} className="w-full p-2 border rounded" required />
                     </div>
-                    <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">
-                        Create User
-                    </button>
+                    <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded">Create User</button>
                 </form>
             </div>
 
@@ -159,16 +85,11 @@ function AdminPage() {
                         {users.length === 0 ? (
                             <p className="text-center text-gray-600">No users found.</p>
                         ) : (
-                            users.map((user) => (
-                                <li key={user.id} className="mb-4 border-b pb-2">
+                            users.map((u) => (
+                                <li key={u.id} className="mb-4 border-b pb-2">
                                     <div className="flex justify-between items-center">
-                                        <span>{user.name} ({user.email})</span>
-                                        <button
-                                            className="text-blue-500 hover:underline"
-                                            onClick={() => handleUserSelect(user.id)}
-                                        >
-                                            Select
-                                        </button>
+                                        <span>{u.name} ({u.email})</span>
+                                        <button className="text-blue-500 hover:underline" onClick={() => handleUserSelect(u.id)}>Select</button>
                                     </div>
                                 </li>
                             ))

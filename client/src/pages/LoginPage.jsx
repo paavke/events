@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import config from '../config/config.js';
+import { decodeJwt } from '../utils/jwt';
 
 function LoginPage() {
     const [username, setUsername] = useState('');
@@ -17,12 +18,12 @@ function LoginPage() {
             const body = new URLSearchParams({
                 client_id: config.clientId,
                 grant_type: 'password',
-                username: username,
-                password: password
+                username,
+                password,
             });
 
             const response = await axios.post(
-                `${config.baseURL}/auth/realms/${config.realm}/protocol/openid-connect/token`,
+                `${config.authBaseURL}/auth/realms/${config.realm}/protocol/openid-connect/token`,
                 body.toString(),
                 { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
             );
@@ -30,17 +31,22 @@ function LoginPage() {
             const data = response.data;
 
             if (data.error) {
-                console.error('Error description:', data.error_description);
                 setError('Invalid username or password');
                 return;
             }
 
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
+
+            const decoded = decodeJwt(data.access_token);
+            if (decoded?.sub) {
+                localStorage.setItem('userId', decoded.sub);
+            }
+
             navigate('/admin');
-        } catch (error) {
+        } catch (err) {
             setError('Login failed');
-            console.error('Login failed', error);
+            console.error('Login failed', err);
         }
     };
 
@@ -50,26 +56,9 @@ function LoginPage() {
                 <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
                 {error && <p className="text-red-500 mb-4 text-center">{error}</p>}
                 <form onSubmit={handleLogin}>
-                    <input
-                        type="text"
-                        placeholder="Username"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="w-full p-2 mb-4 border rounded"
-                    />
-                    <input
-                        type="password"
-                        placeholder="Password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="w-full p-2 mb-4 border rounded"
-                    />
-                    <button
-                        type="submit"
-                        className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-                    >
-                        Login
-                    </button>
+                    <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 mb-4 border rounded" />
+                    <input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full p-2 mb-4 border rounded" />
+                    <button type="submit" className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600">Login</button>
                 </form>
             </div>
         </div>

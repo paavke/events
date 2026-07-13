@@ -5,10 +5,10 @@ const NavBar = () => {
     const userId = localStorage.getItem('userId');
     const navigate = useNavigate();
 
-
     const handleLogout = () => {
         localStorage.removeItem('userId');
         localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
         navigate('/login');
     };
 
@@ -18,9 +18,11 @@ const NavBar = () => {
                 <div className="flex space-x-4">
                     <Link to="/" className="text-white">Home</Link>
                     {userId && (
-                        <Link to={`/dashboard/${userId}`} className="text-white">Dashboard</Link>
+                        <>
+                            <Link to={`/dashboard/${userId}`} className="text-white">Dashboard</Link>
+                            <Link to={`/events-list/${userId}`} className="text-white">Events</Link>
+                        </>
                     )}
-                    <Link to={`/events-list/${userId}`} className="text-white">Events</Link>
                     <Link to="/tasks" className="text-white">Tasks</Link>
                     <Link to="/profile" className="text-white">Profile</Link>
                 </div>

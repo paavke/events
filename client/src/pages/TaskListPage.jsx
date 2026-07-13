@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import config from '../config/config';
+import apiClient, { apimanUrl } from '../services/apiClient';
 
 const TaskListPage = () => {
     const [tasks, setTasks] = useState([]);
@@ -10,49 +9,26 @@ const TaskListPage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
+        const userId = localStorage.getItem('userId');
+
         const fetchTasks = async () => {
             try {
-                const token = localStorage.getItem('accessToken');
-                const headers = {
-                    Authorization: `Bearer ${token}`,
-                };
-
-                const response = await axios.get(
-                    `${config.baseURL}/apiman-gateway/default/tasks/1.0?apikey=${config.apikey}`,
-                    { headers }
-                );
-
-                console.log("API response:", response.data);
-
+                const url = userId
+                    ? apimanUrl(`/tasks/1.0/assignee/${userId}`)
+                    : apimanUrl('/tasks/1.0');
+                const response = await apiClient.get(url);
                 const data = response.data;
-
-                if (Array.isArray(data)) {
-                    setTasks(data);
-                } else if (Array.isArray(data.tasks)) {
-                    setTasks(data.tasks);
-                } else {
-                    console.error("Unexpected task format:", data);
-                    setTasks([]);
-                }
-
-                setLoading(false);
-            } catch (error) {
-                console.error('Failed to fetch tasks:', error);
+                setTasks(Array.isArray(data) ? data : data.tasks || []);
+            } catch (err) {
+                console.error('Failed to fetch tasks:', err);
                 setError('Failed to fetch tasks');
+            } finally {
                 setLoading(false);
             }
         };
 
         fetchTasks();
     }, []);
-
-    const handleTaskClick = (taskId) => {
-        navigate(`/task-details/${taskId}`);
-    };
-
-    const handleCreateTask = () => {
-        navigate('/create-task');
-    };
 
     if (loading) return <p>Loading...</p>;
     if (error) return <p>{error}</p>;
@@ -61,24 +37,15 @@ const TaskListPage = () => {
         <div className="min-h-screen bg-gray-100 p-6">
             <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-6">
                 <h2 className="text-3xl font-bold mb-6">Task List</h2>
-
                 <div className="flex justify-end mb-4">
-                    <button
-                        className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                        onClick={handleCreateTask}
-                    >
+                    <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => navigate('/create-task')}>
                         Create Task
                     </button>
                 </div>
-
                 <ul>
                     {tasks.length > 0 ? (
                         tasks.map((task) => (
-                            <li
-                                key={task.id}
-                                className="mb-4 cursor-pointer hover:underline"
-                                onClick={() => handleTaskClick(task.id)}
-                            >
+                            <li key={task.id} className="mb-4 cursor-pointer hover:underline" onClick={() => navigate(`/task-details/${task.id}`)}>
                                 <strong>{task.title}</strong>: {task.description}
                             </li>
                         ))

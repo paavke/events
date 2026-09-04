@@ -1,30 +1,30 @@
-# Use the base image for Wildfly 10.1.0
+# Apiman on WildFly 10.1.0.Final (matches the working local setup)
+# Overlay is downloaded at build time from Maven Central (not committed to git).
+
+FROM alpine:3.20 AS overlay
+RUN apk add --no-cache curl unzip
+WORKDIR /tmp
+ARG APIMAN_VERSION=1.5.5.Final
+RUN curl -fsSL \
+      -o overlay.zip \
+      "https://repo1.maven.org/maven2/io/apiman/apiman-distro-wildfly10/${APIMAN_VERSION}/apiman-distro-wildfly10-${APIMAN_VERSION}-overlay.zip" \
+    && mkdir -p /overlay \
+    && unzip -q overlay.zip -d /overlay
+
 FROM jboss/wildfly:10.1.0.Final
 
-# Set the working directory
-WORKDIR /opt/jboss/wildfly
-
-# Copy the Apiman overlay files
-COPY ./apiman-distro-wildfly/ /opt/jboss/wildfly/
-
-# Switch to root to change permissions
 USER root
 
-# Create missing directories and apply permissions
-RUN mkdir -p /opt/jboss/wildfly/standalone/data/content && \
-    mkdir -p /opt/jboss/wildfly/standalone/log && \
-    chmod -R 777 /opt/jboss/wildfly/standalone/data && \
-    chmod -R 777 /opt/jboss/wildfly/standalone/data/content && \
-    chmod -R 777 /opt/jboss/wildfly/standalone/configuration && \
-    chmod -R 777 /opt/jboss/wildfly/standalone/deployments && \
-    chmod -R 777 /opt/jboss/wildfly/standalone/log
+COPY --from=overlay /overlay/ /opt/jboss/wildfly/
 
-# Switch back to the jboss user
+RUN mkdir -p \
+      /opt/jboss/wildfly/standalone/data/content \
+      /opt/jboss/wildfly/standalone/log \
+    && chown -R jboss:jboss /opt/jboss/wildfly \
+    && chmod -R ug+rwX /opt/jboss/wildfly/standalone
+
 USER jboss
 
-# Expose the port Wildfly is running on
 EXPOSE 8080
 
-# Run Wildfly with the Apiman configuration
 CMD ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-apiman.xml", "-b", "0.0.0.0"]
-

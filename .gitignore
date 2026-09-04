@@ -37,9 +37,9 @@ build/
 ### Mac OS ###
 .DS_Store
 
-### Apiman overlay (large binary, download locally) ###
-infra/
+### Apiman overlay (large binary; image downloads it at build time) ###
 apiman-distro-wildfly*/
+wildfly-10.1.0.Final/
 
 ### Frontend env ###
 client/.env

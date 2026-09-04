@@ -1,106 +1,155 @@
-version: '3'
-services:
+# Eventure Docker stack
+# - Apiman (WildFly 10.1.0.Final): http://localhost:8080  (API gateway)
+# - Keycloak:                      http://localhost:8180/auth
+# - Frontend:                      http://localhost:3000
+# - MongoDB:                       localhost:27017
 
+services:
   mongo_db:
-    image: mongo:4.4
+    image: mongo:6
     networks:
       - app-network
     ports:
       - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
-
+  # jboss/keycloak was removed from Docker Hub — use official image.
+  # --http-relative-path=/auth keeps existing /auth/realms/... URLs working.
   keycloak:
-    image: jboss/keycloak:16.1.0
+    image: quay.io/keycloak/keycloak:26.0.7
+    command:
+      - start-dev
+      - --http-relative-path=/auth
+      - --hostname-strict=false
+      - --http-enabled=true
     environment:
-      - KEYCLOAK_USER=danilo
-      - KEYCLOAK_PASSWORD=test
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-danilo}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-test}
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: "8180"
+      KC_HOSTNAME_STRICT_HTTPS: "false"
+      KC_PROXY_HEADERS: xforwarded
     ports:
-      - "8080:8080"
+      - "8180:8080"
     networks:
       - app-network
-    depends_on:
-      - mongo_db
-
 
   apiman:
-    image: jboss/wildfly:10.1.0.Final
-    volumes:
-      - ./apiman-distro-wildfly10-1.5.5.Final-overlay:/opt/jboss/wildfly
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        APIMAN_VERSION: ${APIMAN_VERSION:-1.5.5.Final}
     ports:
       - "8080:8080"
     networks:
       - app-network
     depends_on:
-      - mongo_db
-    command: ["/opt/jboss/wildfly/bin/standalone.sh", "-c", "standalone-apiman.xml"]
-
+      - user-service
+      - event-service
+      - task-service
+      - participant-service
+    volumes:
+      - apiman_data:/opt/jboss/wildfly/standalone/data
 
   user-service:
     build:
       context: ./server/user-service
     ports:
-      - "8083:8081"
+      - "8083:8083"
     networks:
       - app-network
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
-      - SPRING_DATA_MONGODB_DATABASE=users
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
-
+      SPRING_DATA_MONGODB_URI: mongodb://mongo_db:27017/eventure
+      SPRING_DATA_MONGODB_DATABASE: users
+      # iss in browser tokens = public Keycloak URL; keys fetched inside Docker network
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8180}/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}/protocol/openid-connect/certs
+      SERVICES_EVENT_SERVICE_URL: http://event-service:8082
+      SERVICES_TASK_SERVICE_URL: http://task-service:8084
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   event-service:
     build:
       context: ./server/event-service
     ports:
-      - "8082:8081"
+      - "8082:8082"
     networks:
       - app-network
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
-      - SPRING_DATA_MONGODB_DATABASE=events
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
-
+      SPRING_DATA_MONGODB_URI: mongodb://mongo_db:27017/eventure
+      SPRING_DATA_MONGODB_DATABASE: events
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8180}/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}/protocol/openid-connect/certs
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   task-service:
     build:
       context: ./server/task-service
     ports:
-      - "8084:8081"
+      - "8084:8084"
     networks:
       - app-network
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
-      - SPRING_DATA_MONGODB_DATABASE=tasks
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
-
+      SPRING_DATA_MONGODB_URI: mongodb://mongo_db:27017/eventure
+      SPRING_DATA_MONGODB_DATABASE: tasks
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8180}/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}/protocol/openid-connect/certs
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   participant-service:
     build:
       context: ./server/participant-service
     ports:
-      - "8085:8081"
+      - "8085:8085"
     networks:
       - app-network
     environment:
-      - SPRING_DATA_MONGODB_URI=mongodb://mongo_db:27017/eventure
-      - SPRING_DATA_MONGODB_DATABASE=participants
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=http://localhost:8080/auth/realms/danilo_eventure
-      - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI=http://localhost:8080/auth/realms/danilo_eventure/protocol/openid-connect/certs
-
+      SPRING_DATA_MONGODB_URI: mongodb://mongo_db:27017/eventure
+      SPRING_DATA_MONGODB_DATABASE: participants
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8180}/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://keycloak:8080/auth/realms/${KEYCLOAK_REALM:-danilo_eventure}/protocol/openid-connect/certs
+    depends_on:
+      mongo_db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
 
   frontend:
     build:
       context: ./client
+      args:
+        # Direct to Apiman on host :8080 (same URLs as your working local setup)
+        REACT_APP_API_BASE_URL: ${APIMAN_PUBLIC_URL:-http://localhost:8080}
+        REACT_APP_AUTH_BASE_URL: ${KEYCLOAK_PUBLIC_URL:-http://localhost:8180}
+        REACT_APP_KEYCLOAK_REALM: ${KEYCLOAK_REALM:-danilo_eventure}
+        REACT_APP_KEYCLOAK_CLIENT_ID: ${KEYCLOAK_CLIENT_ID:-eventure-app}
+        REACT_APP_APIMAN_API_KEY: ${APIMAN_API_KEY:-dd4c8216-cfb7-4629-aad3-bb3da1a4c4ec}
     ports:
       - "3000:80"
     networks:
       - app-network
     depends_on:
+      - apiman
+      - keycloak
       - user-service
       - event-service
       - participant-service
@@ -112,3 +161,4 @@ networks:
 
 volumes:
   mongo_data:
+  apiman_data:
